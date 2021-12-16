@@ -502,7 +502,7 @@
 		BAACDB47276B105300CF6CCB /* QNAutoZone.h in Headers */ = {isa = PBXBuildFile; fileRef = 3149446F244851DE00386F16 /* QNAutoZone.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BAACDB48276B105300CF6CCB /* QNFixedZone.h in Headers */ = {isa = PBXBuildFile; fileRef = 31494474244852BA00386F16 /* QNFixedZone.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BAACDB49276B105300CF6CCB /* QNErrorCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 31D84468254017BD005C0222 /* QNErrorCode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BAACDB4A276B105300CF6CCB /* QNServerConfigMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 31A697EF26D6197D00D84ABC /* QNServerConfigMonitor.h */; };
+		BAACDB4A276B105300CF6CCB /* QNServerConfigMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 31A697EF26D6197D00D84ABC /* QNServerConfigMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BAACDB4B276B105300CF6CCB /* QNServerConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 31A6983826DCD1E800D84ABC /* QNServerConfig.h */; };
 		BAACDB4C276B105300CF6CCB /* QNServerUserConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = 31A6984326DCD20100D84ABC /* QNServerUserConfig.h */; };
 		BAACDB4D276B105300CF6CCB /* QNServerConfigCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 31A6985326DCDB3F00D84ABC /* QNServerConfigCache.h */; };
@@ -1435,6 +1435,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAACDB4A276B105300CF6CCB /* QNServerConfigMonitor.h in Headers */,
 				BAACDAB6276B0F6000CF6CCB /* QiniuSDK.h in Headers */,
 				BAACDB0E276B105200CF6CCB /* QNReportConfig.h in Headers */,
 				BAACDB47276B105300CF6CCB /* QNAutoZone.h in Headers */,
@@ -1501,7 +1502,6 @@
 				BAACDB43276B105300CF6CCB /* QNUploadRequestState.h in Headers */,
 				BAACDB44276B105300CF6CCB /* QNConfig.h in Headers */,
 				BAACDB46276B105300CF6CCB /* QNZoneInfo.h in Headers */,
-				BAACDB4A276B105300CF6CCB /* QNServerConfigMonitor.h in Headers */,
 				BAACDB4B276B105300CF6CCB /* QNServerConfig.h in Headers */,
 				BAACDB4C276B105300CF6CCB /* QNServerUserConfig.h in Headers */,
 				BAACDB4D276B105300CF6CCB /* QNServerConfigCache.h in Headers */,
