@@ -76,6 +76,21 @@
     return data.index == 0;
 }
 
+- (BOOL)isValid {
+    if (![super isValid]) {
+        return false;
+    }
+    
+    __block BOOL valid = true;
+    [self.blockList enumerateObjectsUsingBlock:^(QNUploadBlock *block, NSUInteger idx, BOOL * _Nonnull stop) {
+        valid = [block isValid];
+        if (!valid) {
+            *stop = true;
+        }
+    }];
+    return  valid;
+}
+
 - (BOOL)reloadSource {
     self.isEOF = false;
     self.readError = nil;
@@ -250,7 +265,7 @@
     // 已经加载过 block 数据
     // 没有需要上传的片 或者 有需要上传片但是已加载过片数据
     QNUploadData *nextUploadData = [block nextUploadDataWithoutCheckData];
-    if (nextUploadData.state == QNUploadStateWaitToUpload) {
+    if (nextUploadData.state == QNUploadStateWaitToUpload && nextUploadData.data != nil) {
         return block;
     }
     

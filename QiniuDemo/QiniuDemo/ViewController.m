@@ -6,9 +6,15 @@
 //  Copyright © 2016年 Aaron. All rights reserved.
 //
 
+#if __has_include("Configure.h")
 #import "Configure.h" // 测试参数配置，暂时只有token，可删除
+#else
+#define YourToken @""
+#endif
+
 #import "ViewController.h"
-#import "QNTransactionManager.h"
+//#import "QNTransactionManager.h"
+#import <HappyDNS/HappyDNS.h>
 #import <Photos/Photos.h>
 
 typedef NS_ENUM(NSInteger, UploadState){
@@ -53,7 +59,7 @@ typedef NS_ENUM(NSInteger, UploadState){
     self.title = @"七牛云上传";
 }
 
-- (IBAction)chooseAction:(id)sender {
+- (IBAction)chooseAction:(UIButton *)sender {
     [self gotoImageLibrary];
 }
 
@@ -64,10 +70,10 @@ typedef NS_ENUM(NSInteger, UploadState){
         NSString *path = [[NSBundle mainBundle] pathForResource:@"UploadResource.dmg" ofType:nil];
         path = [[NSBundle mainBundle] pathForResource:@"image.png" ofType:nil];
         path = [[NSBundle mainBundle] pathForResource:@"image.jpg" ofType:nil];
-        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_6M.zip" ofType:nil];
+        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_14M.zip" ofType:nil];
 //        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_9M.zip" ofType:nil];
 //        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_49M.zip" ofType:nil];
-//        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_1.44G.zip" ofType:nil];
+//        path = [[NSBundle mainBundle] pathForResource:@"UploadResource_1G.zip" ofType:nil];
         
 //        NSFileManager *manager = [NSFileManager defaultManager];
 //        NSURL *desktopUrl = [manager URLsForDirectory:NSDesktopDirectory inDomains:NSUserDomainMask].firstObject;
@@ -113,7 +119,7 @@ typedef NS_ENUM(NSInteger, UploadState){
     [self uploadImageToQNFilePath:filePath complete:^{
         NSDate *end = [NSDate date];
         NSLog(@"\n======= 第 %ld 次上传结束 耗时：%lfs", index, [end timeIntervalSinceDate:start]);
-        [self uploadImageToQNFilePath:filePath index:index];
+//        [self uploadImageToQNFilePath:filePath index:index];
     }];
 }
 
@@ -121,27 +127,40 @@ typedef NS_ENUM(NSInteger, UploadState){
     
 //    kQNGlobalConfiguration.isDnsOpen = NO;
 //    kQNGlobalConfiguration.connectCheckEnable = false;
-    kQNGlobalConfiguration.dnsCacheMaxTTL = 600;
-    kQNGlobalConfiguration.partialHostFrozenTime = 20*60;
+//    kQNGlobalConfiguration.dnsCacheMaxTTL = 600;
+//    kQNGlobalConfiguration.partialHostFrozenTime = 20*60;
 //    kQNGlobalConfiguration.dns = self;
     
 //    [QNServerConfigMonitor removeConfigCache];
     
+    kQNGlobalConfiguration.udpDnsIpv4Servers = @[@"223.5.5.5", @"114.114.114.114"];
+    kQNGlobalConfiguration.dohIpv4Servers = @[@"https://223.6.6.6/dns-query"];
+    
     NSString *key = [NSString stringWithFormat:@"iOS_Demo_%@", [NSDate date]];
+    key = @"iOS-Test";
     self.token = YourToken;
-
+    self.token = @"5cJEzNSnh3PjOHZR_E0u1HCkXw4Bw1ZSuWQI9ufz:-ul1AJ8Fvpc7WhtpVT91Pvdfreo=:eyJzY29wZSI6InpvbmUwLXNwYWNlIiwiZGVhZGxpbmUiOjM0MzM3NDYyNTl9";
+    
+    
     QNConfiguration *configuration = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
         builder.timeoutInterval = 90;
         builder.retryMax = 1;
 //        builder.useHttps = NO;
-        
-        builder.useConcurrentResumeUpload = true;
-        builder.concurrentTaskCount = 3;
-        builder.resumeUploadVersion = QNResumeUploadVersionV1;
+
+        builder.useConcurrentResumeUpload = false;
+        builder.concurrentTaskCount = 2;
+        builder.resumeUploadVersion = QNResumeUploadVersionV2;
         builder.putThreshold = 4*1024*1024;
-        builder.chunkSize = 1*1024*1024;
-        builder.zone = [[QNFixedZone alloc] initWithUpDomainList:@[kUploadFixHost00, kUploadFixHost01]];
-        builder.recorder = [QNFileRecorder fileRecorderWithFolder:[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] error:nil];
+        builder.chunkSize = 5*1024*1024;
+        builder.accelerateUploading = true;
+//        builder.zone = [[QNFixedZone alloc] initWithAccUpDomainList:@[@"zone0-space.kodo-accelerate.cn-east-1.qiniucs.com"]
+//                                                             upList:@[kUploadFixHost00]
+//                                                          oldUpList:@[]
+//                                                           regionId:@"custom"];
+        // [[QNFixedZone alloc] initWithUpDomainList:@[kUploadFixHost00, kUploadFixHost01]];
+        NSString *recorderPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+        NSLog(@"== record path:%@", recorderPath);
+        builder.recorder = [QNFileRecorder fileRecorderWithFolder:recorderPath error:nil];
     }];
     
     

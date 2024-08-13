@@ -14,13 +14,33 @@
 通过 CocoaPods
 
 ```ruby
-pod "Qiniu", "~> 8.4.0" 
+pod "Qiniu", "~> 8.8.0" 
+```
+
+通过 Swift Package Manager (Xcode 11+)
+```
+App 对接:
+File -> Swift Packages -> Add Package Dependency，输入库链接，选择相应版本即可
+库链接: https://github.com/qiniu/objc-sdk
+
+库对接:
+let package = Package(
+    dependencies: [
+        .package(url: "https://github.com/qiniu/objc-sdk", from: "8.8.0")
+    ],
+    // ...
+)
+
 ```
 
 ## 运行环境
 
 |               Qiniu SDK 版本               | 最低 iOS版本 | 最低 OS X 版本 |     Notes     |
 | :--------------------------------------: | :------: | :--------: | :-----------: |
+|                  8.8.x                   |  iOS 9   | OS X 10.15  | Xcode 最低版本 11 |
+|                  8.7.x                   |  iOS 9   | OS X 10.15  | Xcode 最低版本 11 |
+|                  8.6.x                   |  iOS 7   | OS X 10.15  | Xcode 最低版本 11 |
+|                  8.5.x                   |  iOS 7   | OS X 10.15  | Xcode 最低版本 11 |
 |                  8.4.x                   |  iOS 7   | OS X 10.15  | Xcode 最低版本 11 |
 |                  8.3.x                   |  iOS 7   | OS X 10.15  | Xcode 最低版本 11 |
 |                  8.2.x                   |  iOS 7   | OS X 10.15  | Xcode 最低版本 11 |
@@ -57,12 +77,13 @@ pod "Qiniu", "~> 8.4.0"
 #import <QiniuSDK.h>
 ...
     QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
-        builder.useHttps = NO;// 是否使用https
-        builder.zone = [QNFixedZone zone0];// 指定华东区域
-        // builder.zone = [QNFixedZone zone1];// 指定华北区域
-        // builder.zone = [QNFixedZone zone2];// 指定华南区域
-        // builder.zone = [QNFixedZone zoneNa0];// 指定北美区域
-        // builder.zone = [QNFixedZone zoneAs0];// 指定东南亚区域
+        builder.useHttps = YES;// 是否使用https
+        builder.zone = [[QNAutoZone alloc] init];// 根据 bucket 自动查询区域
+        // builder.zone = [QNFixedZone createWithRegionId:@"z0"];// 指定华东区域
+        // builder.zone = [QNFixedZone createWithRegionId:@"z1"];// 指定华北区域
+        // builder.zone = [QNFixedZone createWithRegionId:@"z2"];// 指定华南区域
+        // builder.zone = [QNFixedZone createWithRegionId:@"na0"];// 指定北美区域
+        // builder.zone = [QNFixedZone createWithRegionId:@"as0"];// 指定东南亚区域
     }];
     
     QNUploadManager *upManager = [[QNUploadManager alloc] initWithConfiguration:config];
@@ -107,6 +128,7 @@ $ xcodebuild test -workspace QiniuSDK.xcworkspace -scheme QiniuSDK_Mac -configur
 - 如果需要支持 iOS 5 或者支持 RestKit, 请用 AFNetworking 1.x 分支的版本
 - 如果碰到其他编译错误, 请参考 CocoaPods 的 [troubleshooting](http://guides.cocoapods.org/using/troubleshooting.html)
 - iOS 9+ 强制使用https，需要在project build info 添加NSAppTransportSecurity类型Dictionary。在NSAppTransportSecurity下添加NSAllowsArbitraryLoads类型Boolean,值设为YES。 具体操作可参见 http://blog.csdn.net/guoer9973/article/details/48622823
+- 上传返回错误码理解，[status code 注释](https://github.com/qiniu/objc-sdk/blob/master/QiniuSDK/Common/QNErrorCode.h)
 
 ## 代码贡献
 

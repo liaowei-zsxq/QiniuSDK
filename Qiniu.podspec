@@ -1,23 +1,24 @@
 Pod::Spec.new do |s|
   s.name         = 'Qiniu'
-  s.version      = '8.4.0'
+  s.version      = '8.8.0'
   s.summary      = 'Qiniu Resource Storage SDK for iOS and Mac'
   s.homepage     = 'https://github.com/qiniu/objc-sdk'
   s.social_media_url = 'http://weibo.com/qiniutek'
   s.author       = "Qiniu => sdk@qiniu.com"
   s.source       = {:git => 'https://github.com/qiniu/objc-sdk.git', :tag => "v#{s.version}"}
 
-  s.ios.deployment_target = '7.0'
-  s.osx.deployment_target = '10.9'
+  s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.15'
 
-  s.source_files = "QiniuSDK/**/*.{h,m}"
+  s.source_files = 'QiniuSDK/BigData/**/*.{h,m}','QiniuSDK/Collect/**/*.{h,m}','QiniuSDK/Common/**/*.{h,m}','QiniuSDK/Http/**/*.{h,m}','QiniuSDK/Recorder/**/*.{h,m}','QiniuSDK/Storage/**/*.{h,m}','QiniuSDK/Transaction/**/*.{h,m}','QiniuSDK/Utils/**/*.{h,m}','QiniuSDK/QiniuSDK.h'
+  s.resource_bundle = {"Qiniu.privacy"=>"QiniuSDK/PrivacyInfo.xcprivacy"}
   s.requires_arc = true
   s.libraries = 'z'
-  s.dependency 'HappyDNS', '~> 1.0.0'
+  s.dependency 'HappyDNS', '~> 1.0.4'
   s.license = { :type => "MIT", :text => <<-LICENSE
 The MIT License (MIT)
 
-Copyright (c) 2011-2020 qiniu.com
+Copyright (c) 2011-2024 qiniu.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

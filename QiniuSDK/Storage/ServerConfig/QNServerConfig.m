@@ -89,35 +89,68 @@
 @end
 
 
+@interface QNConnectCheckConfig()
+@property(nonatomic, assign)BOOL isOverride;
+@property(nonatomic, strong)NSNumber *enable;
+@property(nonatomic, strong)NSNumber *timeoutMs;
+@property(nonatomic, strong)NSArray <NSString *> *urls;
+@end
+@implementation QNConnectCheckConfig
++ (instancetype)config:(NSDictionary *)info {
+    QNConnectCheckConfig *config = [[QNConnectCheckConfig alloc] init];
+    config.isOverride = [info[@"override_default"] boolValue];
+    config.enable = info[@"enabled"];
+    config.timeoutMs = info[@"timeout_ms"];
+    if (info[@"urls"] && [info[@"urls"] isKindOfClass:[NSArray class]]) {
+        config.urls = info[@"urls"];
+    }
+    return config;
+}
+@end
+
+
 @interface QNServerConfig()
 @property(nonatomic, strong)NSDictionary *info;
 @property(nonatomic, assign)double timestamp;
 @property(nonatomic, assign)long ttl;
 @property(nonatomic, strong)QNServerRegionConfig *regionConfig;
-@property(nonatomic, strong)QNServerDnsConfig *dnsConfig;
+@property(nonatomic, strong)QNServerDnsConfig    *dnsConfig;
+@property(nonatomic, strong)QNConnectCheckConfig *connectCheckConfig;
 @end
 @implementation QNServerConfig
 
 + (instancetype)config:(NSDictionary *)info {
-    QNServerConfig *config = [[QNServerConfig alloc] init];
-    config.ttl = [info[@"ttl"] longValue];
-    config.regionConfig = [QNServerRegionConfig config:info[@"region"]];
-    config.dnsConfig = [QNServerDnsConfig config:info[@"dns"]];
-    
-    if (config.ttl < 10) {
-        config.ttl = 10;
+    return [[QNServerConfig alloc] initWithDictionary:info];
+}
+
+- (nonnull id<QNCacheObject>)initWithDictionary:(nullable NSDictionary *)info {
+    if (self = [self init]) {
+        if (info) {
+            self.ttl = [info[@"ttl"] longValue];
+            self.regionConfig = [QNServerRegionConfig config:info[@"region"]];
+            self.dnsConfig = [QNServerDnsConfig config:info[@"dns"]];
+            self.connectCheckConfig = [QNConnectCheckConfig config:info[@"connection_check"]];
+            
+            if (self.ttl < 10) {
+                self.ttl = 10;
+            }
+            
+            NSMutableDictionary *mutableInfo = [info mutableCopy];
+            if (info[@"timestamp"] != nil) {
+                self.timestamp = [info[@"timestamp"] doubleValue];
+            }
+            if (self.timestamp == 0) {
+                self.timestamp = [[NSDate date] timeIntervalSince1970];
+                mutableInfo[@"timestamp"] = @(self.timestamp);
+            }
+            self.info = [mutableInfo copy];
+        }
     }
-    
-    NSMutableDictionary *mutableInfo = [info mutableCopy];
-    if (info[@"timestamp"] != nil) {
-        config.timestamp = [info[@"timestamp"] doubleValue];
-    }
-    if (config.timestamp == 0) {
-        config.timestamp = [[NSDate date] timeIntervalSince1970];
-        mutableInfo[@"timestamp"] = @(config.timestamp);
-    }
-    config.info = [mutableInfo copy];
-    return config;
+    return self;
+}
+
+- (nullable NSDictionary *)toDictionary {
+    return [self.info copy];
 }
 
 - (BOOL)isValid {

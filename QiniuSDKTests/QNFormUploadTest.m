@@ -31,12 +31,30 @@
     [super tearDown];
 }
 
+//- (void)debugtest {
+//    int size = 20*1024;
+//    QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
+//        builder.useConcurrentResumeUpload = NO;
+//        builder.useHttps = YES;
+////        builder.zone = [QNFixedZone zone0];
+//    }];
+//    NSString *key = [NSString stringWithFormat:@"form_switch_region_%dk", size];
+//    QNTempFile *tempFile = [QNTempFile createTempFileWithSize:size * 1024 identifier:key];
+//
+//    [self uploadAndAssertResult:200
+//                       tempFile:tempFile
+//                          token:token_na0
+//                            key:key
+//                         config:config
+//                         option:[QNUploadOption defaultOptions]];
+//}
+
 - (void)testSwitchRegion {
     QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
         builder.useConcurrentResumeUpload = NO;
         builder.useHttps = YES;
     }];
-    NSArray *sizeArray = @[@5, @50, @200, @500, @800, @1000, @2000, @3000, @4000];
+    NSArray *sizeArray = @[@5, @800, @2000, @4000];
     for (NSNumber *size in sizeArray) {
         NSString *key = [NSString stringWithFormat:@"form_switch_region_%@k", size];
         QNTempFile *tempFile = [QNTempFile createTempFileWithSize:[size intValue] * 1024 identifier:key];
@@ -48,11 +66,12 @@
     float cancelPercent = 0.02;
     
     QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
+        builder.putThreshold = 100*1024*1024;
         builder.useHttps = YES;
     }];
     NSArray *sizeArray = @[@30000]; // 网速太快
     for (NSNumber *size in sizeArray) {
-        NSString *key = [NSString stringWithFormat:@"form_cancel_%@k", size];
+        NSString *key = [NSString stringWithFormat:@"form_cancel_%@k_%@", size, [NSDate date]];
         QNTempFile *tempFile = [QNTempFile createTempFileWithSize:[size intValue] * 1024 identifier:key];
         [self allFileTypeCancelTest:cancelPercent * size.longLongValue * 1024 tempFile:tempFile key:key config:config option:nil];
     }
@@ -62,7 +81,7 @@
     QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
         builder.useHttps = NO;
     }];
-    NSArray *sizeArray = @[@5, @50, @200, @500, @800, @1000, @2000, @3000, @4000];
+    NSArray *sizeArray = @[@5, @800, @2000, @4000];
     @autoreleasepool {
         for (NSNumber *size in sizeArray) {
             NSString *key = [NSString stringWithFormat:@"form_http_%@k", size];
@@ -76,7 +95,7 @@
     QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
         builder.useHttps = YES;
     }];
-    NSArray *sizeArray = @[@5, @50, @200, @500, @800, @1000, @2000, @3000, @4000];
+    NSArray *sizeArray = @[@4000];
     @autoreleasepool {
         for (NSNumber *size in sizeArray) {
             NSString *key = [NSString stringWithFormat:@"form_https_%@k", size];

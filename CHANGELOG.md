@@ -1,4 +1,54 @@
 #Changelog
+## 8.8.0（2024-06-24）
+- 上传支持加速域名
+- 查询区域移除备用域名：api.qiniu.com
+
+## 8.7.2（2024-04-11）
+- 增加 PrivacyInfo 文件
+
+## 8.7.1（2023-11-23）
+- 查询区域的主备域名增加 uc.qiniuapi.com
+
+## 8.7.0（2023-10-23）
+- iOS 最低版本调整至 iOS9
+- QNFixedZone 新增通过 RegionID 构造实例的方法
+- 区域查询结果缓存支持磁盘缓存
+  
+## 8.6.0（2023-08-07）
+- 调整在根据 Bucket 获取其所在区域信息时的主备域名顺序
+- 移除亚太-首尔区域
+
+## 8.5.3 (2023-06-29)
+- 对 Dns 预解析和网络检测中的默认域名进行 Base64 处理
+- HappyDns 依赖升至 [v1.0.3](https://github.com/qiniu/happy-dns-objc/releases/tag/v1.0.3)
+
+## 8.5.2 (2022-12-28)
+- 处理 Server 配置同步并发问题
+
+## 8.5.1 (2022-12-28)
+- 优化 Server 配置获取逻辑
+
+## 8.5.0 (2022-10-25)
+- 优化分片上传 ctx 超时检测
+- QNDnsDelegate 代理函数名调整 lookup: 调整为 query:【不兼容变更】
+- 移除雾存储区域：华东一区
+- 增加亚太-首尔和华东浙江 2 区固定 Region
+- 处理网络检测阶段可能出现的并发异常
+
+## 8.4.4 (2022-06-02)
+- HappyDns 依赖升至 [v1.0.2](https://github.com/qiniu/happy-dns-objc/releases/tag/v1.0.2)
+
+## 8.4.3 (2022-05-18)
+- 优化表单上传：当出现内存问题抛出错误
+- 优化分片 v1 上传：强化验证上传块数据验证
+- 增加上传 [status code 注释](https://github.com/qiniu/objc-sdk/blob/master/QiniuSDK/Common/QNErrorCode.h)
+
+## 8.4.2(2022-02-28)
+- 为默认自动获取上传域名流程增加了新的备份域名
+
+## 8.4.1(2022-01-27)
+- 支持 Swift Package Manager
+
 ## 8.4.0(2021-12-07)
 ## 优化
 - DNS 预解析支持 DoH (DNS over HTTPS)

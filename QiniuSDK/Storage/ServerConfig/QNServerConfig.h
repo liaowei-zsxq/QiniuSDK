@@ -6,6 +6,7 @@
 //  Copyright © 2021 Qiniu. All rights reserved.
 //
 
+#import "QNCache.h"
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -64,12 +65,25 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface QNServerConfig : NSObject
+@interface QNConnectCheckConfig : NSObject
+
+@property(nonatomic, assign, readonly)BOOL isOverride;
+@property(nonatomic, strong, readonly)NSNumber *enable;
+@property(nonatomic, strong, readonly)NSNumber *timeoutMs;
+@property(nonatomic, strong, readonly)NSArray <NSString *> *urls;
+
++ (instancetype)config:(NSDictionary *)info;
+
+@end
+
+
+@interface QNServerConfig : NSObject<QNCacheObject>
 
 @property(nonatomic, assign, readonly)BOOL isValid;
 @property(nonatomic, assign, readonly)long ttl;
 @property(nonatomic, strong, readonly)QNServerRegionConfig *regionConfig;
-@property(nonatomic, strong, readonly)QNServerDnsConfig *dnsConfig;
+@property(nonatomic, strong, readonly)QNServerDnsConfig    *dnsConfig;
+@property(nonatomic, strong, readonly)QNConnectCheckConfig *connectCheckConfig;
 
 @property(nonatomic, strong, readonly)NSDictionary *info;
 

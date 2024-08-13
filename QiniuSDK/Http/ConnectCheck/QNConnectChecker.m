@@ -76,6 +76,15 @@
     __block BOOL isCompleted = false;
     kQNWeakSelf;
     NSArray *allHosts = [kQNGlobalConfiguration.connectCheckURLStrings copy];
+    if (allHosts.count == 0) {
+        QNUploadSingleRequestMetrics *metrics = [QNUploadSingleRequestMetrics emptyMetrics];
+        [metrics start];
+        [metrics end];
+        metrics.error = [NSError errorWithDomain:@"com.qiniu.NetworkCheck" code:NSURLErrorUnsupportedURL userInfo:@{@"user_info":@"check host is empty"}];
+        complete(metrics);
+        return;
+    }
+    
     for (NSString *host in allHosts) {
         [self checkHost:host complete:^(QNUploadSingleRequestMetrics *metrics) {
             kQNStrongSelf;
@@ -113,17 +122,6 @@
     
     QNUploadSingleRequestMetrics *timeoutMetric = [QNUploadSingleRequestMetrics emptyMetrics];
     [timeoutMetric start];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * kQNGlobalConfiguration.connectCheckTimeout), [self checkQueue], ^{
-        @synchronized (self) {
-            if (hasCallback) {
-                return;
-            }
-            hasCallback = true;
-        }
-        [timeoutMetric end];
-        timeoutMetric.error = [NSError errorWithDomain:@"com.qiniu.NetworkCheck" code:NSURLErrorTimedOut userInfo:nil];
-        complete(timeoutMetric);
-    });
     
     QNUploadSystemClient *client = [[QNUploadSystemClient alloc] init];
     [client request:request server:nil connectionProxy:nil progress:nil complete:^(NSURLResponse *response, QNUploadSingleRequestMetrics * metrics, NSData * _Nullable data, NSError * error) {
@@ -136,6 +134,19 @@
         QNLogInfo(@"== checkHost:%@ responseInfo:%@", host, response);
         complete(metrics);
     }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * kQNGlobalConfiguration.connectCheckTimeout), [self checkQueue], ^{
+        @synchronized (self) {
+            if (hasCallback) {
+                return;
+            }
+            hasCallback = true;
+        }
+        [client cancel];
+        [timeoutMetric end];
+        timeoutMetric.error = [NSError errorWithDomain:@"com.qiniu.NetworkCheck" code:NSURLErrorTimedOut userInfo:nil];
+        complete(timeoutMetric);
+    });
 }
 
 @end

@@ -24,8 +24,8 @@
 
 @property(nonatomic, strong)QNPartsUploadPerformer *uploadPerformer;
 
-@property(nonatomic, strong)QNResponseInfo *uploadDataErrorResponseInfo;
-@property(nonatomic, strong)NSDictionary *uploadDataErrorResponse;
+@property(   atomic, strong)QNResponseInfo *uploadDataErrorResponseInfo;
+@property(   atomic, strong)NSDictionary *uploadDataErrorResponse;
 
 @end
 @implementation QNPartsUpload
@@ -92,11 +92,6 @@
 }
 
 - (BOOL)switchRegion{
-    // 重新加载资源，如果加载失败，不可切换 region
-    if (![self.uploadPerformer couldReloadInfo] || ![self.uploadPerformer reloadInfo]) {
-        return false;
-    }
-    
     BOOL isSuccess = [super switchRegion];
     if (isSuccess) {
         [self.uploadPerformer switchRegion:self.getCurrentRegion];
@@ -105,9 +100,18 @@
     return isSuccess;
 }
 
-- (BOOL)switchRegionAndUpload{
+- (BOOL)switchRegionAndUploadIfNeededWithErrorResponse:(QNResponseInfo *)errorResponseInfo {
     [self reportBlock];
-    return [super switchRegionAndUpload];;
+    return [super switchRegionAndUploadIfNeededWithErrorResponse:errorResponseInfo];
+}
+
+- (BOOL)reloadUploadInfo {
+    if (![super reloadUploadInfo]) {
+        return NO;
+    }
+    
+    // 重新加载资源
+    return [self.uploadPerformer couldReloadInfo] && [self.uploadPerformer reloadInfo];
 }
 
 - (void)startToUpload{

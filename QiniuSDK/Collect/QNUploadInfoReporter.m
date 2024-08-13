@@ -109,9 +109,9 @@
     }
     
     // 串行队列处理文件读写
-    dispatch_async(_recordQueue, ^{
-        [self saveReportJsonString:jsonString];
-        [self reportToServerIfNeeded:token];
+    dispatch_async(self.recordQueue, ^{
+        [kQNReporter saveReportJsonString:jsonString];
+        [kQNReporter reportToServerIfNeeded:token];
     });
 }
 
@@ -144,7 +144,7 @@
 - (void)reportToServerIfNeeded:(NSString *)tokenString {
     BOOL needToReport = NO;
     long currentTime = [[NSDate date] timeIntervalSince1970];
-    long interval = self.config.interval * 60;
+    long interval = self.config.interval * 10;
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSDictionary *recorderFileAttr = [fileManager attributesOfItemAtPath:self.recorderFilePath error:nil];
@@ -175,10 +175,8 @@
             }
         }
         
-        kQNWeakSelf;
         QNTransaction *transaction = [QNTransaction transaction:kQNUplogDelayReportTransactionName after:interval action:^{
-            kQNStrongSelf;
-            [self reportToServerIfNeeded:tokenString];
+            [kQNReporter reportToServerIfNeeded:tokenString];
         }];
         [kQNTransactionManager addTransaction:transaction];
     }

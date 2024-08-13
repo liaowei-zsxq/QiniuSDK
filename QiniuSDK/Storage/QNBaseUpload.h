@@ -46,7 +46,7 @@ typedef void (^QNUpTaskCompletionHandler)(QNResponseInfo *info, NSString *key, Q
 //MARK:-- 构造函数
 
 /// file构造函数
-/// @param file file信息
+/// @param uploadSource 文件源
 /// @param key 上传key
 /// @param token 上传token
 /// @param option 上传option
@@ -82,13 +82,16 @@ typedef void (^QNUpTaskCompletionHandler)(QNResponseInfo *info, NSString *key, Q
 /// 初始化数据
 - (void)initData;
 
-//MARK:-- 上传
+//MARK: -- 上传
 
 /// 开始上传流程
 - (void)run;
 
 /// 准备上传
 - (int)prepareToUpload;
+
+/// 重新加载上传数据
+- (BOOL)reloadUploadInfo;
 
 /// 开始上传
 - (void)startToUpload;

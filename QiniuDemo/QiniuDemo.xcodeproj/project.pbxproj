@@ -8,12 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		26F62ADDD5B6306E978C9A3F /* libPods-QiniuDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CB2139715DD7B6FD5B146E /* libPods-QiniuDemoTests.a */; };
-		2B848FF719DFA7ECB394CA9F /* libPods-QiniuDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B9BC5A8D93F988C1240E05F /* libPods-QiniuDemo.a */; };
-		31304CA325628E97001034D2 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = 31304CA025628E97001034D2 /* image.png */; };
-		31304CA425628E97001034D2 /* UploadResource_49M.zip in Resources */ = {isa = PBXBuildFile; fileRef = 31304CA125628E97001034D2 /* UploadResource_49M.zip */; };
-		31304CA525628E97001034D2 /* image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 31304CA225628E97001034D2 /* image.jpg */; };
-		318D377527192578004AA91F /* UploadResource_9M.zip in Resources */ = {isa = PBXBuildFile; fileRef = 318D377427192577004AA91F /* UploadResource_9M.zip */; };
-		31B188E426C365F0006046CC /* UploadResource_6M.zip in Resources */ = {isa = PBXBuildFile; fileRef = 31B188E326C365F0006046CC /* UploadResource_6M.zip */; };
+		4561F02C28D9A6F80098A697 /* UploadResource_14M.zip in Resources */ = {isa = PBXBuildFile; fileRef = 4561F02B28D9A6F80098A697 /* UploadResource_14M.zip */; };
+		45E6080929ADD57100634200 /* UploadResource_1G.zip in Resources */ = {isa = PBXBuildFile; fileRef = 45E6080829ADD57100634200 /* UploadResource_1G.zip */; };
 		93D230241C86D7F700434F6D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D230231C86D7F700434F6D /* main.m */; };
 		93D230271C86D7F700434F6D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D230261C86D7F700434F6D /* AppDelegate.m */; };
 		93D2302A1C86D7F700434F6D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D230291C86D7F700434F6D /* ViewController.m */; };
@@ -22,6 +18,7 @@
 		93D230321C86D7F700434F6D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 93D230301C86D7F700434F6D /* LaunchScreen.storyboard */; };
 		93D2303D1C86D7F700434F6D /* QiniuDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D2303C1C86D7F700434F6D /* QiniuDemoTests.m */; };
 		93D230481C86D7F800434F6D /* QiniuDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93D230471C86D7F800434F6D /* QiniuDemoUITests.m */; };
+		9C463550C07FFFC029A652B8 /* libPods-QiniuDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B9BC5A8D93F988C1240E05F /* libPods-QiniuDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,13 +41,10 @@
 /* Begin PBXFileReference section */
 		14CB2139715DD7B6FD5B146E /* libPods-QiniuDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QiniuDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24EE530BBB100BED89B08A3D /* Pods-QiniuDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QiniuDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-QiniuDemo/Pods-QiniuDemo.release.xcconfig"; sourceTree = "<group>"; };
-		31304CA025628E97001034D2 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
-		31304CA125628E97001034D2 /* UploadResource_49M.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = UploadResource_49M.zip; sourceTree = "<group>"; };
-		31304CA225628E97001034D2 /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image.jpg; sourceTree = "<group>"; };
-		318191AF25315F3500D18536 /* Configure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Configure.h; sourceTree = "<group>"; };
 		3189882026469145003CCA68 /* QiniuDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QiniuDemo.entitlements; sourceTree = "<group>"; };
-		318D377427192577004AA91F /* UploadResource_9M.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = UploadResource_9M.zip; sourceTree = "<group>"; };
-		31B188E326C365F0006046CC /* UploadResource_6M.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = UploadResource_6M.zip; sourceTree = "<group>"; };
+		4561F02B28D9A6F80098A697 /* UploadResource_14M.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = UploadResource_14M.zip; sourceTree = "<group>"; };
+		4561F02F28D9AB090098A697 /* Configure.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configure.h; sourceTree = "<group>"; };
+		45E6080829ADD57100634200 /* UploadResource_1G.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = UploadResource_1G.zip; sourceTree = "<group>"; };
 		6B9BC5A8D93F988C1240E05F /* libPods-QiniuDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-QiniuDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93D2301F1C86D7F700434F6D /* QiniuDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QiniuDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93D230231C86D7F700434F6D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -78,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B848FF719DFA7ECB394CA9F /* libPods-QiniuDemo.a in Frameworks */,
+				9C463550C07FFFC029A652B8 /* libPods-QiniuDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,17 +94,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		318191A92531516F00D18536 /* DemoTestResource */ = {
+		37C097D5D636357AA82067EF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				318D377427192577004AA91F /* UploadResource_9M.zip */,
-				31B188E326C365F0006046CC /* UploadResource_6M.zip */,
-				31304CA225628E97001034D2 /* image.jpg */,
-				31304CA025628E97001034D2 /* image.png */,
-				31304CA125628E97001034D2 /* UploadResource_49M.zip */,
-				318191AF25315F3500D18536 /* Configure.h */,
 			);
-			path = DemoTestResource;
+			name = Resources;
+			path = QiniuDemo/Resources;
+			sourceTree = "<group>";
+		};
+		4561F02A28D9A6F80098A697 /* DemoResource */ = {
+			isa = PBXGroup;
+			children = (
+				45E6080829ADD57100634200 /* UploadResource_1G.zip */,
+				4561F02B28D9A6F80098A697 /* UploadResource_14M.zip */,
+				4561F02F28D9AB090098A697 /* Configure.h */,
+			);
+			path = DemoResource;
 			sourceTree = "<group>";
 		};
 		63D8EA8E5532E578D972E007 /* Pods */ = {
@@ -142,6 +141,7 @@
 				93D230201C86D7F700434F6D /* Products */,
 				63D8EA8E5532E578D972E007 /* Pods */,
 				7E4EA7693FD8983C455E9490 /* Frameworks */,
+				37C097D5D636357AA82067EF /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,8 +158,8 @@
 		93D230211C86D7F700434F6D /* QiniuDemo */ = {
 			isa = PBXGroup;
 			children = (
+				4561F02A28D9A6F80098A697 /* DemoResource */,
 				3189882026469145003CCA68 /* QiniuDemo.entitlements */,
-				318191A92531516F00D18536 /* DemoTestResource */,
 				93D230251C86D7F700434F6D /* AppDelegate.h */,
 				93D230261C86D7F700434F6D /* AppDelegate.m */,
 				93D230281C86D7F700434F6D /* ViewController.h */,
@@ -210,6 +210,7 @@
 				93D2301B1C86D7F700434F6D /* Sources */,
 				93D2301C1C86D7F700434F6D /* Frameworks */,
 				93D2301D1C86D7F700434F6D /* Resources */,
+				75482DABF7ED9ABDE45EBF1C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -263,7 +264,7 @@
 		93D230171C86D7F700434F6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = Aaron;
 				TargetAttributes = {
 					93D2301E1C86D7F700434F6D = {
@@ -305,14 +306,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				318D377527192578004AA91F /* UploadResource_9M.zip in Resources */,
 				93D230321C86D7F700434F6D /* LaunchScreen.storyboard in Resources */,
+				45E6080929ADD57100634200 /* UploadResource_1G.zip in Resources */,
+				4561F02C28D9A6F80098A697 /* UploadResource_14M.zip in Resources */,
 				93D2302F1C86D7F700434F6D /* Assets.xcassets in Resources */,
 				93D2302D1C86D7F700434F6D /* Main.storyboard in Resources */,
-				31304CA525628E97001034D2 /* image.jpg in Resources */,
-				31B188E426C365F0006046CC /* UploadResource_6M.zip in Resources */,
-				31304CA325628E97001034D2 /* image.png in Resources */,
-				31304CA425628E97001034D2 /* UploadResource_49M.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -333,6 +331,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		75482DABF7ED9ABDE45EBF1C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-QiniuDemo/Pods-QiniuDemo-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/HappyDNS/HappyDNS.privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Qiniu/Qiniu.privacy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/HappyDNS.privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Qiniu.privacy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-QiniuDemo/Pods-QiniuDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		7BC7BFB54A15F4E854C3D84E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -456,6 +474,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -480,7 +499,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -511,6 +530,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -529,7 +549,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -543,14 +563,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QiniuDemo/QiniuDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				DEVELOPMENT_TEAM = W2TP34G2MM;
 				INFOPLIST_FILE = QiniuDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.qiniu.QiniuDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qiniu.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -560,14 +584,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QiniuDemo/QiniuDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				DEVELOPMENT_TEAM = W2TP34G2MM;
 				INFOPLIST_FILE = QiniuDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.qiniu.QiniuDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qiniu.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_SWIFT_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

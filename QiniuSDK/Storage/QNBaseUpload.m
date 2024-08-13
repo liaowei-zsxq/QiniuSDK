@@ -6,6 +6,7 @@
 //  Copyright © 2020 Qiniu. All rights reserved.
 //
 
+#import "QNAutoZone.h"
 #import "QNZoneInfo.h"
 #import "QNResponseInfo.h"
 #import "QNDefine.h"
@@ -105,11 +106,18 @@ NSString *const QNUploadUpTypeResumableV2 = @"resumable_v2";
     [self.metrics start];
     
     kQNWeakSelf;
-    [_config.zone preQuery:self.token on:^(int code, QNResponseInfo *responseInfo, QNUploadRegionRequestMetrics *metrics) {
+    [_config.zone query:self.config token:self.token on:^(QNResponseInfo * _Nullable responseInfo, QNUploadRegionRequestMetrics * _Nullable metrics, QNZonesInfo * _Nullable zonesInfo) {
+        
         kQNStrongSelf;
         self.metrics.ucQueryMetrics = metrics;
         
-        if (code == 0) {
+        if (responseInfo != nil && responseInfo.isOK && zonesInfo) {
+            if (![self setupRegions:zonesInfo]) {
+                responseInfo = [QNResponseInfo responseInfoWithInvalidArgument:[NSString stringWithFormat:@"setup regions host fail, origin response:%@", responseInfo]];
+                [self complete:responseInfo response:responseInfo.responseDictionary];
+                return;
+            }
+            
             int prepareCode = [self prepareToUpload];
             if (prepareCode == 0) {
                 [self startToUpload];
@@ -118,17 +126,22 @@ NSString *const QNUploadUpTypeResumableV2 = @"resumable_v2";
                 [self complete:responseInfoP response:responseInfoP.responseDictionary];
             }
         } else {
+            if (responseInfo == nil) {
+                // responseInfo 一定会有值
+                responseInfo = [QNResponseInfo responseInfoWithSDKInteriorError:@"can't get regions"];
+            }
+            
             [self complete:responseInfo response:responseInfo.responseDictionary];
         }
     }];
 }
 
+- (BOOL)reloadUploadInfo {
+    return YES;
+}
+
 - (int)prepareToUpload{
-    int ret = 0;
-    if (![self setupRegions]) {
-        ret = -1;
-    }
-    return ret;
+    return 0;
 }
 
 - (void)startToUpload{
@@ -136,6 +149,7 @@ NSString *const QNUploadUpTypeResumableV2 = @"resumable_v2";
     [self.currentRegionRequestMetrics start];
 }
 
+// 内部不再调用
 - (BOOL)switchRegionAndUpload{
     if (self.currentRegionRequestMetrics) {
         [self.currentRegionRequestMetrics end];
@@ -152,13 +166,35 @@ NSString *const QNUploadUpTypeResumableV2 = @"resumable_v2";
 
 // 根据错误信息进行切换region并上传，return:是否切换region并上传
 - (BOOL)switchRegionAndUploadIfNeededWithErrorResponse:(QNResponseInfo *)errorResponseInfo {
-    if (!errorResponseInfo || errorResponseInfo.isOK || // 不存在 || 不是error 不切
-        !errorResponseInfo.couldRetry || ![self.config allowBackupHost] ||  // 不能重试不切
-        ![self switchRegionAndUpload]) { // 切换失败
-        return NO;
+    if (errorResponseInfo.statusCode == 400 && [errorResponseInfo.message containsString:@"incorrect region"]) {
+        [QNAutoZone clearCache];
     }
-
-    return YES;
+    
+    if (!errorResponseInfo || errorResponseInfo.isOK || // 不存在 || 成功 不需要重试
+        ![errorResponseInfo couldRetry] || ![self.config allowBackupHost]) {  // 不能重试
+        return false;
+    }
+    
+    if (self.currentRegionRequestMetrics) {
+        [self.currentRegionRequestMetrics end];
+        [self.metrics addMetrics:self.currentRegionRequestMetrics];
+        self.currentRegionRequestMetrics = nil;
+    }
+    
+    // 重新加载上传数据，上传记录 & Resource index 归零
+    if (![self reloadUploadInfo]) {
+        return false;
+    }
+    
+    // 切换区域，当为 context 过期错误不需要切换区域
+    if (!errorResponseInfo.isCtxExpiedError && ![self switchRegion]) {
+        // 非 context 过期错误，但是切换 region 失败
+        return false;
+    }
+    
+    [self startToUpload];
+    
+    return true;
 }
 
 - (void)complete:(QNResponseInfo *)info
@@ -177,11 +213,15 @@ NSString *const QNUploadUpTypeResumableV2 = @"resumable_v2";
 }
 
 //MARK:-- region
-- (BOOL)setupRegions{
+- (BOOL)setupRegions:(QNZonesInfo *)zonesInfo{
+    if (zonesInfo == nil || zonesInfo.zonesInfo == nil || zonesInfo.zonesInfo.count == 0) {
+        return NO;
+   }
+    
     NSMutableArray *defaultRegions = [NSMutableArray array];
-    NSArray *zoneInfos = [self.config.zone getZonesInfoWithToken:self.token].zonesInfo;
+    NSArray *zoneInfos = zonesInfo.zonesInfo;
     for (QNZoneInfo *zoneInfo in zoneInfos) {
-        QNUploadDomainRegion *region = [[QNUploadDomainRegion alloc] init];
+        QNUploadDomainRegion *region = [[QNUploadDomainRegion alloc] initWithConfig:self.config];
         [region setupRegionData:zoneInfo];
         if (region.isValid) {
             [defaultRegions addObject:region];

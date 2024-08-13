@@ -37,6 +37,9 @@
     if (!value || !key || ![key isKindOfClass:[NSString class]]) {
         return;
     }
+    if ([value isKindOfClass:[NSString class]] && [(NSString *)value length] > 1024) {
+        value = [(NSString *)value substringToIndex:1024];
+    }
     [self.keyValues setValue:value forKey:key];
 }
 
@@ -71,13 +74,11 @@
 @implementation QNUploadInfoReporter(ReportItem)
 
 - (void)reportItem:(QNReportItem *)item token:(NSString *)token{
-    QNAsyncRun(^{
-        NSString *itemJsonString = [item toJson];
-        QNLogInfo(@"up log:%@", itemJsonString);
-        if (itemJsonString && ![itemJsonString isEqualToString:@"{}"]) {
-            [self report:itemJsonString token:token];
-        }
-    });
+    NSString *itemJsonString = [item toJson];
+    QNLogInfo(@"up log:%@", itemJsonString);
+    if (itemJsonString && ![itemJsonString isEqualToString:@"{}"]) {
+        [kQNReporter report:itemJsonString token:token];
+    }
 }
 
 @end

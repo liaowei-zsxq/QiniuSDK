@@ -68,6 +68,14 @@
         return;
     }
     
+    if (chunk.data == nil) {
+        QNLogInfo(@"key:%@ chunk data is nil", self.key);
+        
+        QNResponseInfo *responseInfo = [QNResponseInfo responseInfoOfZeroData:@"chunk data is nil"];;
+        completeHandler(YES, responseInfo, nil, nil);
+        return;
+    }
+    
     kQNWeakSelf;
     void (^progress)(long long, long long) = ^(long long totalBytesWritten, long long totalBytesExpectedToWrite){
         kQNStrongSelf;
@@ -79,8 +87,10 @@
         kQNStrongSelf;
         
         NSString *blockContext = response[@"ctx"];
-        if (responseInfo.isOK && blockContext) {
+        NSNumber *expiredAt = response[@"expired_at"];
+        if (responseInfo.isOK && blockContext && expiredAt) {
             block.context = blockContext;
+            block.expiredAt = expiredAt;
             chunk.state = QNUploadStateComplete;
             [self recordUploadInfo];
             [self notifyProgress:false];

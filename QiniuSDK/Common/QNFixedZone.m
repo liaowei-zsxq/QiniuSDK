@@ -8,6 +8,7 @@
 
 #import "QNFixedZone.h"
 #import "QNZoneInfo.h"
+#import "QNResponseInfo.h"
 
 @interface QNFixedZone ()
 
@@ -26,6 +27,17 @@
                                               regionId:@"z0"];
     });
     return z0;
+}
+
++ (instancetype)zoneCnEast2 {
+    static QNFixedZone *zoneCnEast2 = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        zoneCnEast2 = [[QNFixedZone alloc] initWithUpDomainList:@[@"upload-cn-east-2.qiniup.com", @"up-cn-east-2.qiniup.com"]
+                                                      oldUpList:nil
+                                                       regionId:@"cn-east-2"];
+    });
+    return zoneCnEast2;
 }
 
 + (instancetype)zone1 {
@@ -72,26 +84,25 @@
     return zAs0;
 }
 
-+ (instancetype)zoneFogCnEast1 {
-    static QNFixedZone *zFogCnEast1 = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        zFogCnEast1 = [[QNFixedZone alloc] initWithUpDomainList:@[@"upload-fog-cn-east-1.qiniup.com",
-                                                                  @"up-fog-cn-east-1.qiniup.com"]
-                                                      oldUpList:@[@"upload-fog-cn-east-1.qiniup.com",
-                                                                  @"up-fog-cn-east-1.qiniup.com"]
-                                                       regionId:@"fog-cn-east-1"];;
-    });
-    return zFogCnEast1;
-}
-
 + (QNFixedZone *)localsZoneInfo{
 
     NSArray *zones = @[[QNFixedZone zone0],
                        [QNFixedZone zone1],
                        [QNFixedZone zone2],
+                       [QNFixedZone zoneCnEast2],
                        [QNFixedZone zoneNa0],
                        [QNFixedZone zoneAs0]];
+    QNFixedZone *zone = [self combineZones:zones];
+    if (zone) {
+        [zone.zonesInfo toTemporary];
+    }
+    return zone;
+}
+
++ (QNFixedZone *)combineZones:(NSArray<QNFixedZone *> *)zones {
+    if (zones == nil || zones.count == 0) {
+        return nil;
+    }
     
     NSMutableArray <QNZoneInfo *> *zoneInfoArray = [NSMutableArray array];
     for (QNFixedZone *zone in zones) {
@@ -110,6 +121,14 @@
     return [[QNFixedZone alloc] initWithUpDomainList:upList oldUpList:nil regionId:nil];
 }
 
++ (instancetype)createWithRegionId:(NSString *)regionId {
+    NSArray *upList = @[
+        [NSString stringWithFormat:@"upload-%@.qiniup.com", regionId],
+        [NSString stringWithFormat:@"up-%@.qiniup.com", regionId],
+    ];
+    return [[QNFixedZone alloc] initWithUpDomainList:upList oldUpList:nil regionId:regionId];
+}
+
 - (QNZonesInfo *)createZonesInfo:(NSArray <NSString *> *)upDomains
                         regionId:(NSString *)regionId {
     return [self createZonesInfo:upDomains oldUpDomains:nil regionId:regionId];
@@ -118,11 +137,21 @@
 - (QNZonesInfo *)createZonesInfo:(NSArray <NSString *> *)upDomains
                     oldUpDomains:(NSArray <NSString *> *)oldUpDomains
                         regionId:(NSString *)regionId {
-    if (!upDomains && upDomains.count == 0) {
+    return [self createZonesInfo:nil domains:upDomains oldDomains:oldUpDomains regionId:regionId];
+}
+
+- (QNZonesInfo *)createZonesInfo:(NSArray <NSString *> *)accDomains
+                         domains:(NSArray <NSString *> *)domains
+                      oldDomains:(NSArray <NSString *> *)oldDomains
+                        regionId:(NSString *)regionId {
+    if ((!accDomains || accDomains.count == 0) && (!domains || domains.count == 0)) {
         return nil;
     }
 
-    QNZoneInfo *zoneInfo = [QNZoneInfo zoneInfoWithMainHosts:upDomains oldHosts:oldUpDomains regionId:regionId];
+    QNZoneInfo *zoneInfo = [QNZoneInfo zoneInfoWithAccHosts:accDomains
+                                                  mainHosts:domains
+                                                   oldHosts:oldDomains
+                                                   regionId:regionId];
     QNZonesInfo *zonesInfo = [[QNZonesInfo alloc] initWithZonesInfo:@[zoneInfo]];
     return zonesInfo;
 }
@@ -148,14 +177,22 @@
     }
     return self;
 }
-
-- (void)preQuery:(QNUpToken *)token
-              on:(QNPrequeryReturn)ret {
-    ret(0, nil, nil);
+- (instancetype)initWithAccUpDomainList:(NSArray<NSString *> *)accUpList
+                                 upList:(NSArray<NSString *> *)upList
+                              oldUpList:(NSArray<NSString *> *)oldUpList
+                               regionId:(NSString *)regionId {
+    if (self = [super init]) {
+        self.zonesInfo = [self createZonesInfo:accUpList domains:upList oldDomains:oldUpList regionId:regionId];
+    }
+    return self;
 }
 
 - (QNZonesInfo *)getZonesInfoWithToken:(QNUpToken *)token {
     return self.zonesInfo;
+}
+
+- (void)query:(QNConfiguration * _Nullable)config token:(QNUpToken * _Nullable)token on:(QNQueryReturn _Nullable)ret {
+    ret([QNResponseInfo successResponse], nil, self.zonesInfo);
 }
 
 

@@ -28,9 +28,13 @@ static NSString *kQNErrorDomain = @"qiniu.com";
 
 @implementation QNResponseInfo
 + (instancetype)successResponse{
+    return [QNResponseInfo successResponseWithDesc:@"inter:ok"];
+}
+
++ (instancetype)successResponseWithDesc:(NSString *)desc {
     QNResponseInfo *responseInfo = [[QNResponseInfo alloc] init];
     responseInfo.statusCode = 200;
-    responseInfo.message = @"inter:ok";
+    responseInfo.message = desc;
     responseInfo.xlog = @"inter:xlog";
     responseInfo.reqId = @"inter:reqid";
     return responseInfo;
@@ -226,15 +230,26 @@ static NSString *kQNErrorDomain = @"qiniu.com";
 }
 
 - (BOOL)couldRetry {
-    if ([self isQiniu] && (self.isCancelled
+    if (![self isQiniu]) {
+        return YES;
+    }
+    
+    if ([self isCtxExpiedError]) {
+        return YES;
+    }
+    
+    if ([self isTransferAccelerationConfigureError]) {
+        return YES;
+    }
+    
+    if (self.isCancelled
         || _statusCode == 100
         || (_statusCode > 300 && _statusCode < 400)
         || (_statusCode > 400 && _statusCode < 500 && _statusCode != 406)
         || _statusCode == 501 || _statusCode == 573
         || _statusCode == 608 || _statusCode == 612 || _statusCode == 614 || _statusCode == 616
         || _statusCode == 619 || _statusCode == 630 || _statusCode == 631 || _statusCode == 640
-        || _statusCode == 701
-        || (_statusCode != kQNLocalIOError && _statusCode != kQNUnexpectedSysCallError && _statusCode < -1 && _statusCode > -1000))) {
+        || (_statusCode != kQNLocalIOError && _statusCode != kQNUnexpectedSysCallError && _statusCode < -1 && _statusCode > -1000)) {
         return NO;
     } else {
         return YES;
@@ -242,7 +257,22 @@ static NSString *kQNErrorDomain = @"qiniu.com";
 }
 
 - (BOOL)couldRegionRetry{
-    if (![self couldRetry] || _statusCode == 400 || _statusCode == 579) {
+    if (![self isQiniu]) {
+        return YES;
+    }
+    
+    if ([self isTransferAccelerationConfigureError]) {
+        return YES;
+    }
+    
+    if (self.isCancelled
+        || _statusCode == 100
+        || (_statusCode > 300 && _statusCode < 500 && _statusCode != 406)
+        || _statusCode == 501 || _statusCode == 573 || _statusCode == 579
+        || _statusCode == 608 || _statusCode == 612 || _statusCode == 614 || _statusCode == 616
+        || _statusCode == 619 || _statusCode == 630 || _statusCode == 631 || _statusCode == 640
+        || _statusCode == 701
+        || (_statusCode != kQNLocalIOError && _statusCode != kQNUnexpectedSysCallError && _statusCode < -1 && _statusCode > -1000)) {
         return NO;
     } else {
         return YES;
@@ -250,8 +280,23 @@ static NSString *kQNErrorDomain = @"qiniu.com";
 }
 
 - (BOOL)couldHostRetry{
-    if ([self isNotQiniu] || ![self couldRegionRetry]
-        || _statusCode == 502 || _statusCode == 503 || _statusCode == 571 || _statusCode == 599) {
+    if (![self isQiniu]) {
+        return YES;
+    }
+    
+    if ([self isTransferAccelerationConfigureError]) {
+        return NO;
+    }
+    
+    if (self.isCancelled
+        || _statusCode == 100
+        || (_statusCode > 300 && _statusCode < 500 && _statusCode != 406)
+        || _statusCode == 501 || _statusCode == 502 || _statusCode == 503
+        || _statusCode == 571 || _statusCode == 573 || _statusCode == 579 || _statusCode == 599
+        || _statusCode == 608 || _statusCode == 612 || _statusCode == 614 || _statusCode == 616
+        || _statusCode == 619 || _statusCode == 630 || _statusCode == 631 || _statusCode == 640
+        || _statusCode == 701
+        || (_statusCode != kQNLocalIOError && _statusCode != kQNUnexpectedSysCallError && _statusCode < -1 && _statusCode > -1000)) {
         return NO;
     } else {
         return YES;
@@ -268,11 +313,21 @@ static NSString *kQNErrorDomain = @"qiniu.com";
 
 - (BOOL)isHostUnavailable{
     // 基本不可恢复，注：会影响下次请求，范围太大可能会造成大量的timeout
-    if (_statusCode == 502 || _statusCode == 503 || _statusCode == 504 || _statusCode == 599) {
+    if ([self isTransferAccelerationConfigureError] ||
+        _statusCode == 502 || _statusCode == 503 || _statusCode == 504 || _statusCode == 599) {
         return true;
     } else {
         return false;
     }
+}
+
+- (BOOL)isCtxExpiedError {
+    return _statusCode == 701 || (_statusCode == 612 && [_message containsString:@"no such uploadId"]);
+}
+
+- (BOOL)isTransferAccelerationConfigureError {
+    NSString *errorDesc = [NSString stringWithFormat:@"%@", self.error];
+    return [errorDesc containsString:@"transfer acceleration is not configured on this bucket"];
 }
 
 - (BOOL)isConnectionBroken {
